@@ -1,6 +1,6 @@
 {
   "name": "node-otpbank",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Hungarian OTP Bank easy-to-integrate Node payment module, demo app included.",
   "main": "index.js",
   "scripts": {
