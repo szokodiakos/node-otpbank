@@ -89,6 +89,7 @@ When at the OTP Bank's website, you can fill out the payment form by using the d
 After the payment form is submitted, the bank redirects the user to the frontend, where details can be seen about the transaction.
 
 The sequence diagram of the demo flow:
+
 ![Alt Sequence diagram](https://cdn.rawgit.com/szokodiakos/node-otpbank/b9bd4086/3ps.svg)
 
 ## Notes
