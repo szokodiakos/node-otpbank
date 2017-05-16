@@ -65,7 +65,7 @@ app.post('/pay', (req, res) => {
   const transactionId = Otpbank.generateTransactionId();
   res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
 
-  const callbackUrl = `http://${CALLBACK_URL_BASE}/app?transaction=${transactionId}`;
+  const callbackUrl = `${CALLBACK_URL_BASE}/app?transaction=${transactionId}`;
   return otpbank.startWorkflowSynch(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT)
     .then((result) => saveTransaction(transactionId, true, amount))
     .catch((error) => saveTransaction(transactionId, false, amount));
