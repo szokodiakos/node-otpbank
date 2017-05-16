@@ -10,6 +10,8 @@ const Otpbank = require('../');
 
 const SHOP_COMMENT = 'A shop comment.';
 const CURRENCY = 'HUF';
+const PORT = process.env.PORT || 3000;
+const CALLBACK_URL_BASE = process.env.CALLBACK_URL_BASE || 'localhost';
 
 // available at https://www.otpbank.hu/portal/hu/Kartyaelfogadas/Webshop
 const POS_ID = '#02299991';
@@ -30,7 +32,7 @@ wOt1vzdPct1YSk88YMD9RUi/xk/VnJHQ7cq8ltAXK/QNYA==
 -----END RSA PRIVATE KEY-----`;
 
 const info = `
-Demo started on port 3000.
+Demo started on port ${PORT}.
 
 Test successful payment card:
 - card number: 4908 3660 9990 0425
@@ -63,7 +65,7 @@ app.post('/pay', (req, res) => {
   const transactionId = Otpbank.generateTransactionId();
   res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
 
-  const callbackUrl = `http://localhost:3000/app?transaction=${transactionId}`;
+  const callbackUrl = `http://${CALLBACK_URL_BASE}/app?transaction=${transactionId}`;
   return otpbank.startWorkflowSynch(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT)
     .then((result) => saveTransaction(transactionId, true, amount))
     .catch((error) => saveTransaction(transactionId, false, amount));
@@ -75,7 +77,7 @@ app.get('/transactions/:transactionId', (req, res) => {
   return res.send({ transaction });
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.info(info);
-  opn('http://localhost:3000/app');
+  opn(`http://localhost:${PORT}/app`);
 });
