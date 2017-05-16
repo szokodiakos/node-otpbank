@@ -36,7 +36,7 @@ const redirectUrl = otpbank.getOtpRedirectUrl(transactionId);
 // return the URL
 // this is an early response as the startWorkflowSynch method resolves only when
 // the user completes the payment form on OTP Bank's website
-res.send({redirectUrl);
+res.send(redirectUrl);
 
 // this will be called by OTP Bank after they verified your payment
 const callbackUrl = `http://yourwebshop.com/app?transaction=${transactionId}`;
