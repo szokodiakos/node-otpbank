@@ -81,3 +81,7 @@ app.listen(PORT, () => {
   console.info(info);
   opn(`http://localhost:${PORT}/app`);
 });
+
+process.on('unhandledRejection', (reason) => {
+  console.log('unhandledRejection Reason: ', reason);
+});
