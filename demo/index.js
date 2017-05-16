@@ -12,6 +12,7 @@ const SHOP_COMMENT = 'A shop comment.';
 const CURRENCY = 'HUF';
 const PORT = process.env.PORT || 3000;
 const CALLBACK_URL_BASE = process.env.CALLBACK_URL_BASE || 'http://localhost:3000';
+const OPEN_IN_BROWSER = process.env.OPEN_IN_BROWSER || true;
 
 // available at https://www.otpbank.hu/portal/hu/Kartyaelfogadas/Webshop
 const POS_ID = '#02299991';
@@ -79,7 +80,10 @@ app.get('/transactions/:transactionId', (req, res) => {
 
 app.listen(PORT, () => {
   console.info(info);
-  opn(`http://localhost:${PORT}/app`);
+  console.log('open in browser is', OPEN_IN_BROWSER, typeof OPEN_IN_BROWSER);
+  if (OPEN_IN_BROWSER) {
+    opn(`http://localhost:${PORT}/app`);
+  }
 });
 
 process.on('unhandledRejection', (reason) => {
