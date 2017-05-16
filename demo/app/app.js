@@ -1,5 +1,5 @@
 (function() {
-  var contentDiv = document.querySelector('.content');
+  var contentDiv = document.querySelector('.demo-content');
   contentDiv.innerHTML = 'Loading...';
 
   var transactionId = window.location.search.split('=')[1];
@@ -9,16 +9,32 @@
       if (!transaction) {
         contentDiv.innerHTML =
           'Transaction with ID ' + transactionId + ' not found.' +
-          '<button class="another">Another</button>';
+          '<p><div class="ui animated primary button another" tabindex="0">' +
+            '<div class="visible content">Go to Pay</div>' +
+            '<div class="hidden content">' +
+              '<i class="left arrow icon"></i>' +
+            '</div>' +
+          '</div></p>';
       } else {
         contentDiv.innerHTML =
           'Transaction with ID ' + transactionId + ' completed.' +
-          '<ul>' +
-          '<li>Succeeded: ' + (transaction.success ? 'Yes' : 'No') + '</li>' +
-          '<li>Date: ' + transaction.date + '</li>' +
-          '<li>Amount: ' + transaction.amount + ' ' + transaction.currency + '</li>' +
-          '</ul>' +
-          '<button class="another">Another</button>';
+          '<p><div class="ui list">' +
+            '<div class="item">' +
+              '<i class="idea icon"></i><div class="content">Succeeded: ' + (transaction.success ? 'Yes' : 'No')  + '</div>' +
+            '</div>' +
+            '<div class="item">' +
+              '<i class="calendar icon"></i><div class="content">Date: ' + transaction.date + '</div>' +
+            '</div>' +
+            '<div class="item">' +
+              '<i class="money icon"></i><div class="content">Amount: ' + transaction.amount + ' ' + transaction.currency + '</div>' +
+            '</div>' +
+          '</div></p>' +
+          '<div class="ui animated primary button another" tabindex="0">' +
+            '<div class="visible content">Pay another</div>' +
+            '<div class="hidden content">' +
+              '<i class="left arrow icon"></i>' +
+            '</div>' +
+          '</div>';
       }
 
       var anotherButton = document.querySelector('.another');
@@ -28,9 +44,16 @@
     });
   } else {
     contentDiv.innerHTML =
-      '<span>Enter amount</span> ' +
-      '<input class="amount" type="number" value="1337"> HUF ' +
-      '<button class="pay">Pay at Otpbank</button>';
+      '<div class="ui input">' +
+        '<input class="amount" type="number" placeholder="Enter Amount">' +
+      '</div> ' +
+      '<div class="ui animated positive button pay" tabindex="0">' +
+        '<div class="visible content">Pay at OTP Bank</div>' +
+        '<div class="hidden content">' +
+          '<i class="right arrow icon"></i>' +
+        '</div>' +
+      '</div>';
+
     var payButton = document.querySelector('.pay');
     payButton.addEventListener('click', function(event) {
       var amountInput = document.querySelector('.amount');

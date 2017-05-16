@@ -33,8 +33,6 @@ wOt1vzdPct1YSk88YMD9RUi/xk/VnJHQ7cq8ltAXK/QNYA==
 -----END RSA PRIVATE KEY-----`;
 
 const info = `
-Demo started on port ${PORT}.
-
 Test successful payment card:
 - card number: 4908 3660 9990 0425
 - exp: 10/14
@@ -79,8 +77,7 @@ app.get('/transactions/:transactionId', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.info(info);
-  console.log('open in browser is', OPEN_IN_BROWSER, typeof OPEN_IN_BROWSER);
+  console.info(`Demo started on port ${PORT}`);
   if (OPEN_IN_BROWSER) {
     opn(`http://localhost:${PORT}/app`);
   }
