@@ -8,7 +8,7 @@
       var transaction = response.data.transaction;
       if (!transaction) {
         contentDiv.innerHTML =
-          'Transaction with ID ' + transactionId + ' not found.' +
+          '<div class="ui negative message"><div class="header">Transaction with ID ' + transactionId + ' not found.</div></div>' +
           '<p><div class="ui animated primary button another" tabindex="0">' +
             '<div class="visible content">Go to Pay</div>' +
             '<div class="hidden content">' +
@@ -17,7 +17,7 @@
           '</div></p>';
       } else {
         contentDiv.innerHTML =
-          'Transaction with ID ' + transactionId + ' completed.' +
+          '<div class="ui positive message"><div class="header">Transaction with ID ' + transactionId + ' completed.</div></div>' +
           '<p><div class="ui list">' +
             '<div class="item">' +
               '<i class="idea icon"></i><div class="content">Succeeded: ' + (transaction.success ? 'Yes' : 'No')  + '</div>' +
