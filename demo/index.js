@@ -58,6 +58,8 @@ function getTransaction(transactionId) {
 app.use('/app', express.static(path.join(__dirname, 'app')));
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => res.redirect('/app'));
+
 app.post('/pay', (req, res) => {
   const amount = req.body.amount;
 
