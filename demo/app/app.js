@@ -44,6 +44,26 @@
     });
   } else {
     contentDiv.innerHTML =
+      '<p>' +
+        '<div class="ui bulleted list">' +
+          '<div class="item">' +
+            '<div>Always succeeding payment card</div>' +
+            '<div class="list">' +
+              '<div class="item">Card Nr: 4908 3660 9990 0425</div>' +
+              '<div class="item">Exp: 10/14</div>' +
+              '<div class="item">CVC: 823</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="item">' +
+            '<div>Always failing payment card</div>' +
+            '<div class="list">' +
+              '<div class="item">Card Nr: 1111 1111 1111 1117</div>' +
+              '<div class="item">Exp: 04/04</div>' +
+              '<div class="item">CVC: 111</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</p>' +
       '<div class="ui input">' +
         '<input class="amount" type="number" placeholder="Enter Amount">' +
       '</div> ' +
