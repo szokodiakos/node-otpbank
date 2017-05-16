@@ -2,6 +2,10 @@
 
 Hungarian OTP Bank easy-to-integrate Node payment module, demo app included.
 
+## Demo online
+
+Available at: [https://frozen-ravine-69013.herokuapp.com/app/](https://frozen-ravine-69013.herokuapp.com/app/)
+
 ## Features
 
 * Three-party Scheme: your app redirects to OTP Bank's site where you can enter the card information. After verification, OTP Bank redirects the user back to your app.
@@ -90,7 +94,7 @@ After the payment form is submitted, the bank redirects the user to the frontend
 
 The sequence diagram of the demo flow:
 
-![Alt Sequence diagram](https://cdn.rawgit.com/szokodiakos/node-otpbank/b9bd4086/3ps.svg)
+![Alt Sequence diagram](3ps.png)
 
 ## Notes
 All used resources (always-working & always-failing bank card infos, dummy private keys, dummy POS number, documentations) are available at the [OTP Bank website](https://www.otpbank.hu/portal/hu/Kartyaelfogadas/Webshop).
