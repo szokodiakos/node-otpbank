@@ -5,18 +5,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-      crossorigin="anonymous">
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   </head>
-  <body>
+  <body ng-app="app" ng-controller="AppController as $ctrl">
     <div class="ui container">
       <p>
         <h1>OTP Bank Demo Payment</h1>
-        <div class="demo-content"></div>
+        <div class="ng-cloak">
+          <div ng-show="$ctrl.transactionId">
+            <div ng-show="!$ctrl.transaction">
+              <div class="ui negative message">
+                <div class="header">Transaction with ID {{ $ctrl.transactionId }} not found.</div>
+              </div>
+              <p>
+                <div class="ui animated primary button" tabindex="0" ng-click="$ctrl.another()">
+                  <div class="visible content">Go to Pay</div>
+                  <div class="hidden content"><i class="left arrow icon"></i></div>
+                </div>
+              </p>
+            </div>
+            <div ng-show="$ctrl.transaction">
+              <div class="ui positive message">
+                <div class="header">Transaction with ID {{ $ctrl.transactionId }} completed.</div>
+              </div>
+              <p>
+                <div class="ui list">
+                  <div class="item">
+                    <i class="idea icon"></i>
+                    <div class="content">Succeeded: {{ $ctrl.transaction.success ? 'Yes' : 'No' }}</div>
+                  </div>
+                  <div class="item">
+                    <i class="calendar icon"></i>
+                    <div class="content">Date: {{ $ctrl.transaction.date | date:'medium' }}</div>
+                  </div>
+                  <div class="item">
+                    <i class="money icon"></i>
+                    <div class="content">Amount: {{ $ctrl.transaction.amount }} {{ $ctrl.transaction.currency }}</div>
+                  </div>
+                </div>
+              </p>
+              <div class="ui animated primary button" tabindex="0" ng-click="$ctrl.another()">
+                <div class="visible content">Pay another</div>
+                <div class="hidden content">
+                  <i class="left arrow icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ng-show="!$ctrl.transactionId">
+            <p>
+              <div class="ui bulleted list">
+                <div class="item">
+                  <div>Always succeeding payment card</div>
+                  <div class="list">
+                    <div class="item">Card Nr: 4908 3660 9990 0425</div>
+                    <div class="item">Exp: 10/14</div>
+                    <div class="item">CVC: 823</div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div>Always failing payment card</div>
+                  <div class="list">
+                    <div class="item">Card Nr: 1111 1111 1111 1117</div>
+                    <div class="item">Exp: 04/04</div>
+                    <div class="item">CVC: 111</div>
+                  </div>
+                </div>
+              </div>
+            </p>
+            <div class="ui input">
+              <input type="number" placeholder="Enter Amount" ng-model="$ctrl.amount">
+            </div>
+            <div class="ui animated positive button" tabindex="0" ng-click="$ctrl.pay()">
+              <div class="visible content">Pay at OTP Bank</div>
+              <div class="hidden content"><i class="right arrow icon"></i></div>
+            </div>
+          </div>
+        </div>
       </p>
     </div>
     <script src="app.js"></script>
