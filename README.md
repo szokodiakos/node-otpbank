@@ -104,3 +104,8 @@ In order to integrate OTP Bank's payment system, you must first make a contract 
 ## Improvements
 * Implement two-party scheme
 * Add tests
+
+## Development notes
+
+* Upon master commit, the Heroku app will automatically redeploy itself with the newest changes.
+* Upon master commit, TravisCI will publish the package to NPM.
