@@ -72,11 +72,11 @@ The transaction ID must be exactly 32 characters long. This method creates an Ob
 
 This is the default strategy and can be ignored, so you can ship your own ID generation algorithm.
 
-#### `getOtpRedirectUrl(transactionId)`
+#### `getOtpRedirectUrl(transactionId: string)`
 
 Returns a URL which will redirect the user to the OTP Bank's website. This URL contains the POS ID (which is received when making  a contract with OTP), and the current transaction ID.
 
-#### `startWorkflowSynch(transactionId, callbackUrl, amount, currency, shopComment)`
+#### `startWorkflowSynch(transactionId: string, callbackUrl: string, amount: number, currency: string, shopComment: string, optionals?: { consumerRegistrationId: string } = { consumerRegistrationId: '' })`
 
 Creates a SOAP request to the OTP Bank's payment server. Returns a `Promise` which will resolve when the user completes the payment form on the bank's website.
 
