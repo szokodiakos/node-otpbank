@@ -1,3 +1,8 @@
+language: node_js
+node_js:
+  - 4
+script:
+  - npm test
 deploy:
   provider: npm
   email: "szokodiakos@gmail.com"
