@@ -60,21 +60,34 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => res.redirect('/app'));
 
-app.post('/pay', (req, res) => {
+app.post('/pay', async (req, res) => {
   const amount = req.body.amount;
 
   const transactionId = Otpbank.generateTransactionId();
   res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
 
   const callbackUrl = `${CALLBACK_URL_BASE}/app?transaction=${transactionId}`;
-  return otpbank.startWorkflowSynch(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT)
-    .then((result) => saveTransaction(transactionId, true, amount))
-    .catch((error) => saveTransaction(transactionId, false, amount));
+
+  try {
+    const resp = await otpbank.startWorkflowSynch(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT);
+    saveTransaction(transactionId, true, amount);
+    // console.log(resp);
+  } catch (error) {
+    console.log(JSON.stringify(error.message, null, 2));
+    saveTransaction(transactionId, false, amount);
+  }
 });
 
-app.get('/transactions/:transactionId', (req, res) => {
+app.get('/transactions/:transactionId', async (req, res) => {
   const transactionId = req.params.transactionId;
   const transaction = getTransaction(transactionId);
+
+  try {
+    const result = await otpbank.getWorkflowState(transactionId);
+    console.log(result);
+  } catch (error) {
+    console.log(JSON.stringify(error.message, null, 2));
+  }
   return res.send({ transaction });
 });
 
