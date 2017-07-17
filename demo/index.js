@@ -63,19 +63,15 @@ app.get('/', (req, res) => res.redirect('/app'));
 app.post('/pay', async (req, res) => {
   const amount = req.body.amount;
 
-  const transactionId = Otpbank.generateTransactionId();
-  res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
-
+  const transactionId = await Otpbank.generateTransactionId();
   const callbackUrl = `${CALLBACK_URL_BASE}/app?transaction=${transactionId}`;
-
   try {
-    const resp = await otpbank.startWorkflowSynch(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT);
+    await otpbank.startTransaction(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT);
     saveTransaction(transactionId, true, amount);
-    // console.log(resp);
   } catch (error) {
-    console.log(JSON.stringify(error.message, null, 2));
     saveTransaction(transactionId, false, amount);
   }
+  return res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
 });
 
 app.get('/transactions/:transactionId', async (req, res) => {
@@ -83,15 +79,15 @@ app.get('/transactions/:transactionId', async (req, res) => {
   const transaction = getTransaction(transactionId);
 
   try {
-    const result = await otpbank.getWorkflowState(transactionId);
-    console.log(result);
+    const result = await otpbank.getTransaction(transactionId);
+    console.log(JSON.stringify(result, null, 2));
   } catch (error) {
     console.log(JSON.stringify(error.message, null, 2));
   }
   return res.send({ transaction });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.info(`Demo started on port ${PORT}`);
   if (OPEN_IN_BROWSER) {
     opn(`http://localhost:${PORT}/app`);

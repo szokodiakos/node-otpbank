@@ -15,19 +15,37 @@ declare namespace otpbank {
     consumerRegistrationId?: string;
   };
 
+  interface IGetTransactionReturn {
+    transactionId: string,
+    posId: string,
+    responseCode: string,
+    state: 'VEVOOLDAL_INPUTVARAKOZAS' | 'FELDOLGOZAS_ALATT' | 'FELDOLGOZVA' | 'VEVOOLDAL_VISSZAVONT' |
+      'VEVOOLDAL_TIMEOUT' | 'BOLTOLDAL_LEZARASVARAKOZAS' | 'LEZARAS_ALATT' | 'BOLTOLDAL_TIMEOUT',
+    startDate: Date,
+    endDate: Date,
+    authorizationCode: string,
+  }
+
+  interface IStartTransactionReturn {
+    transactionId: string,
+    posId: string,
+    message: 'SIKERESWEBSHOPFIZETESINDITAS',
+  }
+
   class Otpbank {
     constructor(posId: string, privateKey: string);
     static generateTransactionId(): string;
     
     getOtpRedirectUrl(transactionId: string): string;
-    startWorkflowSynch(
+    getTransaction(transactionId: string): Promise<IGetTransactionReturn>;
+    startTransaction(
       transactionId: string,
       callbackUrl: string,
       amount: number,
       currency: 'HUF' | 'EUR' | 'USD',
       shopComment: string,
       optionals: IWorkflowSynchOptionals
-    ): Promise<string>;
+    ): Promise<IStartTransactionReturn>;
   }
 }
 
