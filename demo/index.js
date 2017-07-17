@@ -47,47 +47,41 @@ Test unsuccessful payment card:
 const otpbank = new Otpbank(POS_ID, PRIVATE_KEY);
 const app = express();
 
-const transactions = {};
-function saveTransaction(transactionId, success, amount) {
-  transactions[transactionId] = { success, amount, date: new Date(), currency: CURRENCY };
-}
-function getTransaction(transactionId) {
-  return transactions[transactionId];
-}
-
 app.use('/app', express.static(path.join(__dirname, 'app')));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => res.redirect('/app'));
 
-app.post('/pay', async (req, res) => {
+app.post('/pay', (req, res) => {
   const amount = req.body.amount;
 
-  const transactionId = await Otpbank.generateTransactionId();
+  const transactionId = Otpbank.generateTransactionId();
   const callbackUrl = `${CALLBACK_URL_BASE}/app?transaction=${transactionId}`;
-  try {
-    await otpbank.startTransaction(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT);
-    saveTransaction(transactionId, true, amount);
-  } catch (error) {
-    saveTransaction(transactionId, false, amount);
-  }
-  return res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
+  return otpbank.startTransaction(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT)
+    .then(() => {
+      return res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
+    }).catch(error => {
+      return res.send({ error: error.message });
+    });
 });
 
-app.get('/transactions/:transactionId', async (req, res) => {
+app.get('/transactions/:transactionId', (req, res) => {
   const transactionId = req.params.transactionId;
-  const transaction = getTransaction(transactionId);
 
-  try {
-    const result = await otpbank.getTransaction(transactionId);
-    console.log(JSON.stringify(result, null, 2));
-  } catch (error) {
-    console.log(JSON.stringify(error.message, null, 2));
-  }
-  return res.send({ transaction });
+  return otpbank.getTransaction(transactionId)
+    .then(transaction => {
+      return res.send({
+        result: transaction.transactionResult,
+        amount: transaction.amount,
+        date: transaction.startDate,
+        currency: transaction.exchange
+      });
+    }).catch(error => {
+      return res.send({ error: error.message });
+    });
 });
 
-app.listen(PORT, async () => {
+app.listen(PORT, () => {
   console.info(`Demo started on port ${PORT}`);
   if (OPEN_IN_BROWSER) {
     opn(`http://localhost:${PORT}/app`);
