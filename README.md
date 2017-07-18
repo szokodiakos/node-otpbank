@@ -23,7 +23,7 @@ Available at: [https://frozen-ravine-69013.herokuapp.com/app/](https://frozen-ra
 
 ### Setup
 ```javascript
-const Otpbank = require('node-otpbank');
+const { Otpbank } = require('node-otpbank');
 const otpbank = new Otpbank(yourPosId, yourPrivateKey);
 ```
 
@@ -69,7 +69,7 @@ otpbank.getTransaction(transactionId)
 
 ### `Otpbank` class
 
-This is default export of the module.
+This is the Otpbank export of the module.
 
 #### `static generateTransactionId()`
 
