@@ -35,35 +35,35 @@ declare namespace otpbank {
     amount: string;
   }
 
-  interface ITransactionResult {
-    SUCCESS: 'success';
-    CARD_BLOCKED: 'cardBlocked';
-    INVALID_CARD_NUMBER: 'invalidCardNumber';
-    INVALID_CARD_BIN: 'invalidCardBin';
-    CARD_EXPIRED: 'cardExpired';
-    CARD_RESTRICTED: 'cardRestricted';
-    CARD_LOST: 'cardLost';
-    CARD_NOT_ACTIVE: 'cardNotActive';
-    INCORRECT_CARD_CREDENTIALS: 'incorrectCardCredentials';
-    INSUFFICIENT_FUNDS: 'insufficientFunds';
-    CARD_DOES_NOT_COMPLY_WITH_INDUSTRY: 'cardDoesNotComplyWithIndustry';
-    UNKNOWN_CARD_NUMBER: 'cardUnknown';
-    CANNOT_CHARGE_CARD: 'cannotChargeCard';
-    CANNOT_CHARGE_CARD_WITH_GIVEN_AMOUNT: 'cannotChargeCardWithGivenAmount';
-    ERROR: 'error';
-    INVALID_AMOUNT: 'invalidAmount';
+  enum TransactionResults {
+    SUCCESS = 'success',
+    CARD_BLOCKED = 'cardBlocked',
+    INVALID_CARD_NUMBER = 'invalidCardNumber',
+    INVALID_CARD_BIN = 'invalidCardBin',
+    CARD_EXPIRED = 'cardExpired',
+    CARD_RESTRICTED = 'cardRestricted',
+    CARD_LOST = 'cardLost',
+    CARD_NOT_ACTIVE = 'cardNotActive',
+    INCORRECT_CARD_CREDENTIALS = 'incorrectCardCredentials',
+    INSUFFICIENT_FUNDS = 'insufficientFunds',
+    CARD_DOES_NOT_COMPLY_WITH_INDUSTRY = 'cardDoesNotComplyWithIndustry',
+    UNKNOWN_CARD_NUMBER = 'cardUnknown',
+    CANNOT_CHARGE_CARD = 'cannotChargeCard',
+    CANNOT_CHARGE_CARD_WITH_GIVEN_AMOUNT = 'cannotChargeCardWithGivenAmount',
+    ERROR = 'error',
+    INVALID_AMOUNT = 'invalidAmount',
   }
 
-  interface ICardPocketIds {
-    FOOD_VOUCHER: '01';
-    WARM_MEAL_VOUCHER: '02';
-    BACK_TO_SCHOOL_VOUCHER: '03';
-    CULTURAL_VOUCHER: '04';
-    GIFT_VOUCHER: '05';
-    INTERNET_VOUCHER: '06';
-    SZEP_HOSPITALITY_CARD: '07';
-    SZEP_LEISURE_CARD: '08';
-    SZEP_ACCOMMODATION_CARD: '09';
+  enum CardPocketIds {
+    FOOD_VOUCHER = '01',
+    WARM_MEAL_VOUCHER = '02',
+    BACK_TO_SCHOOL_VOUCHER = '03',
+    CULTURAL_VOUCHER = '04',
+    GIFT_VOUCHER = '05',
+    INTERNET_VOUCHER = '06',
+    SZEP_HOSPITALITY_CARD = '07',
+    SZEP_LEISURE_CARD = '08',
+    SZEP_ACCOMMODATION_CARD = '09',
   }
 
   interface IStartTransactionReturn {
@@ -75,8 +75,6 @@ declare namespace otpbank {
   class Otpbank {
     constructor(posId: string, privateKey: string);
     static generateTransactionId(): string;
-    static transactionResults: Readonly<ITransactionResult>;
-    static cardPocketIds: Readonly<ICardPocketIds>;
 
     getOtpRedirectUrl(transactionId: string): string;
     getTransaction(transactionId: string): Promise<IGetTransactionReturn>;
@@ -91,4 +89,8 @@ declare namespace otpbank {
   }
 }
 
-export = otpbank.Otpbank
+export = {
+  Otpbank: otpbank.Otpbank,
+  TransactionResults: otpbank.TransactionResults,
+  CardPocketIds: otpbank.CardPocketIds,
+}

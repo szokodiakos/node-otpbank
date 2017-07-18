@@ -6,7 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const opn = require('opn');
 
-const Otpbank = require('../');
+const { Otpbank } = require('../');
 
 const SHOP_COMMENT = 'A shop comment.';
 const CURRENCY = 'HUF';
