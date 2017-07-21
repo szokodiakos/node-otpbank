@@ -11,13 +11,17 @@
       };
 
       this.another = function another() {
+        this.transaction = null;
+        this.transactionId = null;
         window.location.href = '/app';
       };
 
       this.transactionId = window.location.search.split('=')[1];
       if (this.transactionId) {
+        this.loading = true;
         $http.get('/transactions/' + this.transactionId).then(function(response) {
-          this.transaction = response.data.transaction;
+          this.loading = false;
+          this.transaction = response.data;
         }.bind(this));
       }
     }]);

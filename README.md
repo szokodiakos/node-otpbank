@@ -23,11 +23,11 @@ Available at: [https://frozen-ravine-69013.herokuapp.com/app/](https://frozen-ra
 
 ### Setup
 ```javascript
-const Otpbank = require('node-otpbank');
+const { Otpbank } = require('node-otpbank');
 const otpbank = new Otpbank(yourPosId, yourPrivateKey);
 ```
 
-### In your endpoint
+### In your transaction starter endpoint
 ```javascript
 const amount = req.body.amount;
 
@@ -46,23 +46,30 @@ res.send(redirectUrl);
 const callbackUrl = `http://yourwebshop.com/app?transaction=${transactionId}`;
 
 // initiates a SOAP message to OTP Bank
-// (meanwhile the user fills out the form at OTP Bank's website)
-otpbank.startWorkflowSynch(
+otpbank.startTransaction(
   transactionId,
   callbackUrl,
   amount,
   'HUF',
   `A shop comment which will appear on the OTP Bank's site`
 )
-  .then((result) => /* payment succeeded, yay */)
-  .catch((error) => /* payment was unsuccessful */);
+  .then((result) => /* transaction started, yay */)
+  .catch((error) => /* there was a problem with the request */);
+```
+### In your redirect endpoint (where the transaction is checked)
+```javascript
+// After redirection to the site of the merchant
+otpbank.getTransaction(transactionId)
+  .then((result) => /* get payment data, yay */)
+  .catch((error) => /* cannot get payment data */);
+
 ```
 
 ## API
 
 ### `Otpbank` class
 
-This is default export of the module.
+This is the Otpbank export of the module.
 
 #### `static generateTransactionId()`
 
@@ -76,11 +83,13 @@ This is the default strategy and can be ignored, so you can ship your own ID gen
 
 Returns a URL which will redirect the user to the OTP Bank's website. This URL contains the POS ID (which is received when making  a contract with OTP), and the current transaction ID.
 
-#### `startWorkflowSynch(transactionId: string, callbackUrl: string, amount: number, currency: string, shopComment: string, optionals?: { consumerRegistrationId: string } = { consumerRegistrationId: '' })`
+#### `startTransaction(transactionId: string, callbackUrl: string, amount: number, currency: string, shopComment: string, optionals?: { consumerRegistrationId: string } = { consumerRegistrationId: '' })`
 
-Creates a SOAP request to the OTP Bank's payment server. Returns a `Promise` which will resolve when the user completes the payment form on the bank's website.
+Creates a SOAP request to the OTP Bank's payment server. If succeeded, the transaction just started. You may now redirect the customer to the payment site.
 
-This is the reason why the API endpoint implementing the payment must early respond to the client with the redirect URL.
+#### `getTransaction(transactionId: string)`
+
+Creates a SOAP request to the OTP Bank's payment server. If succeeded, the state of the transaction was retrieved by the request.
 
 ## Demo
 

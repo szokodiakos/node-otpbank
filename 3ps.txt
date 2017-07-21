@@ -1,0 +1,40 @@
+# use http://sequencediagram.org/
+
+participant Frontend
+participant Backend
+participant "OTP Bank" as OTP
+
+Frontend->Backend:POST /pay
+activate Frontend
+activate Backend
+Backend->Backend:Prepare SOAP request
+
+Backend->OTP:SOAP startTransaction
+activate OTP
+OTP-->Backend:transaction started
+deactivate OTP
+
+Backend-->Frontend:redirect URL
+deactivate Backend
+
+Frontend->OTP:redirect user to OTP
+deactivate Frontend
+activate OTP
+
+OTP->OTP:User enters\ncard info
+OTP-->Frontend:redirect user to Frontend with transactionID
+deactivate OTP
+activate Frontend
+
+Frontend->Backend:GET /transaction\nby transactionID
+activate Backend
+
+Backend->Backend:Prepare SOAP request
+Backend->OTP:SOAP getTransaction
+activate OTP
+OTP-->Backend:transaction details
+deactivate OTP
+
+Backend->Backend:process details
+Backend-->Frontend:transaction details
+deactivate Backend

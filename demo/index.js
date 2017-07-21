@@ -6,7 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const opn = require('opn');
 
-const Otpbank = require('../');
+const { Otpbank } = require('../');
 
 const SHOP_COMMENT = 'A shop comment.';
 const CURRENCY = 'HUF';
@@ -47,14 +47,6 @@ Test unsuccessful payment card:
 const otpbank = new Otpbank(POS_ID, PRIVATE_KEY);
 const app = express();
 
-const transactions = {};
-function saveTransaction(transactionId, success, amount) {
-  transactions[transactionId] = { success, amount, date: new Date(), currency: CURRENCY };
-}
-function getTransaction(transactionId) {
-  return transactions[transactionId];
-}
-
 app.use('/app', express.static(path.join(__dirname, 'app')));
 app.use(bodyParser.json());
 
@@ -64,18 +56,29 @@ app.post('/pay', (req, res) => {
   const amount = req.body.amount;
 
   const transactionId = Otpbank.generateTransactionId();
-  res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
-
   const callbackUrl = `${CALLBACK_URL_BASE}/app?transaction=${transactionId}`;
-  return otpbank.startWorkflowSynch(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT)
-    .then((result) => saveTransaction(transactionId, true, amount))
-    .catch((error) => saveTransaction(transactionId, false, amount));
+  return otpbank.startTransaction(transactionId, callbackUrl, amount, CURRENCY, SHOP_COMMENT)
+    .then(() => {
+      return res.send({ url: otpbank.getOtpRedirectUrl(transactionId) });
+    }).catch(error => {
+      return res.send({ error: error.message });
+    });
 });
 
 app.get('/transactions/:transactionId', (req, res) => {
   const transactionId = req.params.transactionId;
-  const transaction = getTransaction(transactionId);
-  return res.send({ transaction });
+
+  return otpbank.getTransaction(transactionId)
+    .then(transaction => {
+      return res.send({
+        result: transaction.transactionResult,
+        amount: transaction.amount,
+        date: transaction.startDate,
+        currency: transaction.exchange
+      });
+    }).catch(error => {
+      return res.send({ error: error.message });
+    });
 });
 
 app.listen(PORT, () => {
