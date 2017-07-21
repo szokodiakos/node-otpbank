@@ -15,16 +15,11 @@ declare namespace otpbank {
     consumerRegistrationId?: string;
   }
 
-  type TTransactionResult = 'success' | 'cardBlocked' | 'invalidCardNumber' | 'invalidCardBin' | 'cardExpired' |
-    'cardRestricted' | 'cardLost' | 'cardNotActive' | 'incorrectCardCredentials' | 'insufficientFunds' |
-    'cardDoesNotComplyWithIndustry' | 'cardUnknown' | 'cannotChargeCard' | 'cannotChargeCardWithGivenAmount' |
-    'error' | 'invalidAmount';
-
   interface IGetTransactionReturn {
     transactionId: string;
     posId: string;
     responseCode: string;
-    transactionResult: TTransactionResult;
+    transactionResult: TransactionResults;
     state: 'VEVOOLDAL_INPUTVARAKOZAS' | 'FELDOLGOZAS_ALATT' | 'FELDOLGOZVA' | 'VEVOOLDAL_VISSZAVONT' |
       'VEVOOLDAL_TIMEOUT' | 'BOLTOLDAL_LEZARASVARAKOZAS' | 'LEZARAS_ALATT' | 'BOLTOLDAL_TIMEOUT';
     startDate: Date;
